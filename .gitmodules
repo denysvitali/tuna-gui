@@ -1,3 +1,3 @@
 [submodule "tuna-ge"]
 	path = tuna-ge
-	url = ./tuna-ge
+	url = ssh://git@git.ded1.denv.it:4000/shrug/tuna-ge.git
