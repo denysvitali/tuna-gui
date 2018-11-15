@@ -1,7 +1,7 @@
 #include <iostream>
-#include <library.h>
+#include "tuna-ge.h"
 
 int main() {
-    hello();
+    TunaGE::init();
     return 0;
 }
