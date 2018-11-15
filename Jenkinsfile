@@ -16,29 +16,17 @@ pipeline {
       }
     }
 
+    stage("Recursive Submodule Clone"){
+      steps {
+        sh "git submodule sync"
+      }
+    }
+
     stage("Build"){
       steps {
         script {
-          docker.image('maven:3-jdk-11').inside() {
-            sh "mvn compile"
-          }
-        }
-      }
-    }
-    stage("Test"){
-      steps {
-        script {
-          docker.image('maven:3-jdk-11').inside() {
-            sh "mvn test"
-          }
-        }
-      }
-    }
-    stage("Package"){
-      steps {
-        script {
-          docker.image('maven:3-jdk-11').inside() {
-            sh "mvn package"
+          docker.image('rikorose/gcc-cmake:latest').inside() {
+            sh "cmake ."
           }
         }
       }
@@ -53,9 +41,13 @@ pipeline {
     }
     always {
         script {
-          COMMIT_LOG = sh(script:"git log --oneline --pretty=format:'%h - %s (%an)' ${GIT_PREVIOUS_COMMIT}..HEAD", returnStdout: true)
+          try {
+            COMMIT_LOG = sh(script:"git log --oneline --pretty=format:'%h - %s (%an)' ${GIT_PREVIOUS_COMMIT}..HEAD", returnStdout: true)
+          } catch(e){
+            COMMIT_LOG = ""
+          }
         }
-        sh "git remote add supsi https://$CRED@scm.ti-edu.ch/repogit/labingsw022018201907tunagelibrary.git | true"
+        sh "git remote add supsi https://$CRED@scm.ti-edu.ch/repogit/labingsw022018201907tunagegui.git | true"
         sh "git push -u supsi origin/$GIT_BRANCH"
         sh "git push --tags supsi origin/$GIT_BRANCH"
         junit 'target/surefire-reports/**/*.xml'
