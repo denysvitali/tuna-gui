@@ -23,7 +23,18 @@ pipeline {
       }
     }
 
-    stage("Build"){
+    stage("Build Lib"){
+      steps {
+        script {
+          docker.image('rikorose/gcc-cmake:latest').inside() {
+            sh "cd tuna-ge && cmake ."
+            sh "cd tuna-ge && make"
+          }
+        }
+      }
+    }
+
+    stage("Build GUI"){
       steps {
         script {
           docker.image('rikorose/gcc-cmake:latest').inside() {
