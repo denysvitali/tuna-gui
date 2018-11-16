@@ -18,7 +18,8 @@ pipeline {
 
     stage("Recursive Submodule Clone"){
       steps {
-        sh "git submodule sync"
+        sh "git submodule init"
+        sh "git submodule update"
       }
     }
 
