@@ -27,8 +27,9 @@ pipeline {
       steps {
         script {
           docker.image('rikorose/gcc-cmake:latest').inside() {
-            sh "cd tuna-ge && cmake ."
-            sh "cd tuna-ge && make"
+            sh "mkdir tuna-ge/cmake-build-debug/"
+            sh "cd tuna-ge/cmake-build-debug && cmake ../"
+            sh "cd tuna-ge/cmake-build-debug && make ../"
           }
         }
       }
@@ -38,8 +39,9 @@ pipeline {
       steps {
         script {
           docker.image('rikorose/gcc-cmake:latest').inside() {
-            sh "cmake ."
-            sh "make"
+            sh "mkdir cmake-build-debug"
+            sh "cd cmake-build-debug && cmake ../"
+            sh "cd cmake-build-debug && make ../"
           }
         }
       }
