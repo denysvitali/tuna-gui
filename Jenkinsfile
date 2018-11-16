@@ -29,7 +29,7 @@ pipeline {
           docker.image('rikorose/gcc-cmake:latest').inside() {
             sh "mkdir tuna-ge/cmake-build-debug/"
             sh "cd tuna-ge/cmake-build-debug && cmake ../"
-            sh "cd tuna-ge/cmake-build-debug && make ../"
+            sh "cd tuna-ge/cmake-build-debug && make"
           }
         }
       }
@@ -41,7 +41,7 @@ pipeline {
           docker.image('rikorose/gcc-cmake:latest').inside() {
             sh "mkdir cmake-build-debug"
             sh "cd cmake-build-debug && cmake ../"
-            sh "cd cmake-build-debug && make ../"
+            sh "cd cmake-build-debug && make"
           }
         }
       }
