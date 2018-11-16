@@ -27,6 +27,7 @@ pipeline {
         script {
           docker.image('rikorose/gcc-cmake:latest').inside() {
             sh "cmake ."
+            sh "make"
           }
         }
       }
