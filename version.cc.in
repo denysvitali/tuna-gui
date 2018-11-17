@@ -1,4 +1,4 @@
-#include "../version.hh"
+#include "../../tuna-gui/version.hh"
 
 using namespace tunagui;
 const std::string Version::GIT_SHA1 = "@GIT_SHA1@";

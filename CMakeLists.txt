@@ -4,6 +4,10 @@ project(tuna_gui)
 set(CMAKE_CXX_STANDARD 14)
 set(GIT_EXECUTABLE git)
 
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+    add_definitions(-DDEBUG=1)
+endif()
+
 execute_process(COMMAND
         "${GIT_EXECUTABLE}" describe --match=NeVeRmAtCh --always --abbrev=7 --dirty
         WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
@@ -26,9 +30,9 @@ execute_process(COMMAND
 
 # generate version.cc
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/version.cc.in" "${CMAKE_CURRENT_BINARY_DIR}/version.cc" @ONLY)
-list(APPEND SOURCES "${CMAKE_CURRENT_BINARY_DIR}/version.cc" version.hh)
+include_directories("../tuna-ge/")
+list(APPEND SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/version.hh" "${CMAKE_CURRENT_BINARY_DIR}/version.cc")
+list(APPEND SOURCES main.cpp)
 
-add_executable(tuna_gui main.cpp)
-include_directories(tuna-ge)
-target_link_libraries(tuna_gui ${PROJECT_SOURCE_DIR}/tuna-ge/cmake-build-debug/libtuna_ge.a)
-target_sources(tuna_gui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/version.hh ${CMAKE_CURRENT_BINARY_DIR}/version.cc)
+add_executable(tuna_gui ${SOURCES})
+target_link_libraries(tuna_gui LINK_PUBLIC tuna_ge)

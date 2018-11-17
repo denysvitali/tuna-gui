@@ -6,6 +6,7 @@
 #include "tuna-ge.h"
 
 using namespace tunagui;
+using namespace tunage;
 
 std::string version(){
     std::stringstream ss{};
@@ -27,7 +28,9 @@ int main(int argc, char** argv) {
         }
     }
     TunaGE::init();
+    TunaGE::enableOriginMarker();
     std::cout << "Library Version: " << TunaGE::version() << std::endl;
     std::cout << "GUI Version: " << version() << std::endl;
+    TunaGE::loop();
     return 0;
 }
