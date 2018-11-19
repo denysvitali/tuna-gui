@@ -21,16 +21,15 @@ void doVersion(){
 }
 
 int main(int argc, char** argv) {
-    for(int i=0; i<argc; i++){
-        if(strcmp(argv[i], "-v") == 0){
-            doVersion();
-            return 0;
-        }
-    }
-    TunaGE::init();
-    TunaGE::enableOriginMarker();
-    std::cout << "Library Version: " << TunaGE::version() << std::endl;
-    std::cout << "GUI Version: " << version() << std::endl;
-    TunaGE::loop();
-    return 0;
+	for (int i = 0; i < argc; i++) {
+		if (strcmp(argv[i], "-v") == 0) {
+			doVersion();
+			return 0;
+		}
+	}
+	TunaGE::init();
+	TunaGE::enableOriginMarker();
+	std::cout << "Library Version: " << TunaGE::version() << std::endl;
+	std::cout << "GUI Version: " << version() << std::endl;
+	TunaGE::loop();
 }
