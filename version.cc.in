@@ -1,6 +1,6 @@
 #pragma once
-#include "stdafx.h"
 #ifdef _WINDOWS
+#include "stdafx.h"
 #include "version.hh"
 #else
 #include "../../tuna-ge/version.hh"
