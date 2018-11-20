@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "version.hh"
 #else
-#include "../version.hh"
+#include "../../tuna-gui/version.hh"
 #endif
 
 using namespace tunagui;
