@@ -30,7 +30,7 @@ execute_process(COMMAND
 
 # generate version.cc
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/version.cc.in" "${CMAKE_CURRENT_BINARY_DIR}/version.cc" @ONLY)
-include_directories("../tuna-ge/")
+include_directories("../tuna-ge")
 list(APPEND SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/version.hh" "${CMAKE_CURRENT_BINARY_DIR}/version.cc")
 list(APPEND SOURCES main.cpp)
 
