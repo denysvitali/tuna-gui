@@ -1,10 +1,8 @@
-#pragma once
-#include "stdafx.h"
-
 #ifdef _WINDOWS
+#include "stdafx.h"
 #include "version.hh"
 #else
-#include "../../tuna-gui/version.hh"
+#include "@CMAKE_CURRENT_SOURCE_DIR@/version.hh"
 #endif
 
 using namespace tunagui;
