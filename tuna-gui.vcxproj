@@ -143,15 +143,15 @@
     <ClCompile Include="version.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="tuna-ge\tuna-ge.vcxproj">
-      <Project>{aef94ea7-0b7d-4e3b-93e4-60626104a469}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="version.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\tuna-ge\tuna-ge.vcxproj">
+      <Project>{aef94ea7-0b7d-4e3b-93e4-60626104a469}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
