@@ -50,7 +50,10 @@ int main(int argc, char** argv) {
 	material.setSpecular(glm::vec3(0.5f, 0.5f, 0.5f));
 	material.setDiffuse(glm::vec3(0.5f, 0.5f, 0.5f));
 
-	//material.setTexture(&tex);
+
+	Texture tex{"muro"};
+	tex.loadFromFile("../../tuna-ge/assets/textures/paving_stones.jpg");
+	material.setTexture(&tex);
 
 	mesh.setMaterial(material);
 
