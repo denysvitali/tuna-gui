@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
 
 	mesh.setMaterial(material);
 
-	mesh.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -2.0f, 5.0f)));
+	mesh.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
 	float width = 1;
 	Vertex v1{ -width, 0, 0, 0, 1, 0, 0, 0 };
 	Vertex v2{ width, 0, 0, 0, 1, 0, 1, 1 };
