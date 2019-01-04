@@ -35,8 +35,8 @@ int main(int argc, char** argv) {
 	TunaGE::init();
 	TunaGE::enableOriginMarker();
 	
-	TunaGE::camera.setCameraPos(glm::vec3(0.0f, 4.0f, 10.0f));  // Camera is at (0,2,10), in World Space
-	TunaGE::camera.setCameraFront(glm::vec3(0.0f, -0.8f, -1.0f)); // looks in the direction
+	TunaGE::camera.setCameraPos(glm::vec3(-0.02f, -6.61, 1.90));  // Camera is at (0,2,10), in World Space
+	TunaGE::camera.setCameraFront(glm::vec3(0.05f, -0.85f, -0.52)); // looks in the direction
 	TunaGE::camera.setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f)); // Head is up (set to 0,-1,0 to look upside-down)
 	TunaGE::camera.setCameraSpeed(0.1f);
 	TunaGE::camera.updateCamera();
@@ -52,7 +52,13 @@ int main(int argc, char** argv) {
 
 
 	Texture tex{"muro"};
+
+#if _WINDOWS
+	tex.loadFromFile("../tuna-ge/assets/textures/paving_stones.jpg");
+#else
 	tex.loadFromFile("../../tuna-ge/assets/textures/paving_stones.jpg");
+
+#endif
 	material.setTexture(&tex);
 
 	mesh.setMaterial(material);
