@@ -46,18 +46,19 @@ int main(int argc, char** argv) {
 
 	RGBColor color = RGBColor::getColor("#1a1a1a");
 	material.setAmbient(color.vec());
-	material.setShininess(200);
+	material.setShininess(120);
 	material.setSpecular(glm::vec3(0.5f, 0.5f, 0.5f));
 	material.setDiffuse(glm::vec3(0.5f, 0.5f, 0.5f));
+	//material.setEmission(glm::vec3(0,0,0));
 
 
 	Texture tex{"muro"};
-	tex.loadFromFile("../../tuna-ge/assets/textures/paving_stones.jpg");
+	tex.loadFromFile("../../tuna-ge/assets/textures/asphalt.jpg");
 	material.setTexture(&tex);
 
 	mesh.setMaterial(material);
 
-	mesh.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -10.0f, 0.0f)));
+	mesh.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -2.0f, 5.0f)));
 	float width = 1;
 	Vertex v1{ -width, 0, 0, 0, 1, 0, 0, 0 };
 	Vertex v2{ width, 0, 0, 0, 1, 0, 1, 1 };
@@ -81,12 +82,34 @@ int main(int argc, char** argv) {
 	light.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0f)));
 	light.setLight(1);
 	light.setIntensity(1.0);
-	light.setLightAmbient(glm::vec3(1.0f, 1.0f, 1.0f));
+	light.setLightAmbient(glm::vec3(0.0f, 1.0f, 0.0f));
 	light.setLightDiffuse(glm::vec3(0.4f, 0.4f, 0.4f));
-	light.setLightSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
+	light.setLightSpecular(glm::vec3(0.0f, 1.0f, 0.0f));
 	light.enable();
 
 	mesh.link(&light);
+
+    Light light2{ RGBColor{100, 255, 255}, "Light 2" };
+    light2.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)));
+    light2.setLight(2);
+    light2.setIntensity(1.0);
+    light2.setLightAmbient(glm::vec3(1.0f, 1.0f, 1.0f));
+    light2.setLightDiffuse(glm::vec3(0.4f, 0.4f, 0.4f));
+    light2.setLightSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
+    light2.enable();
+
+    light.link(&light2);
+
+    Light light3{ RGBColor{100, 255, 255}, "Light 3" };
+    light3.setMatrix(glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, -2.0f)));
+    light3.setLight(3);
+    light3.setIntensity(1.0);
+    light3.setLightAmbient(glm::vec3(1.0f, 0.0f, 0.0f));
+    light3.setLightDiffuse(glm::vec3(0.4f, 0.4f, 0.4f));
+    light3.setLightSpecular(glm::vec3(1.0f, 0.0f, 0.0f));
+    light3.enable();
+
+    light.link(&light3);
 
 	TunaGE::renderList.pass(root);
 
