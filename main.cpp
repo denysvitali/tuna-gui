@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 
 	mesh.link(&light);
 
-	TunaGE::renderList.pass(root);
+	TunaGE::renderList.pass(&root);
 
 	std::cout << "Library Version: " << TunaGE::version() << std::endl;
 	std::cout << "GUI Version: " << version() << std::endl;
