@@ -34,7 +34,6 @@ pipeline {
         sh "git remote add supsi https://$CRED@scm.ti-edu.ch/repogit/labingsw022018201907tunagegui.git | true"
         sh "git push -u supsi origin/$GIT_BRANCH"
         sh "git push --tags supsi origin/$GIT_BRANCH"
-        archiveArtifacts artifacts: 'cmake-build-debug/tuna_gui'
         cleanWs()
     }
   }
