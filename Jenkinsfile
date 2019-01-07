@@ -15,18 +15,6 @@ pipeline {
         sh "git clean -fdx"
       }
     }
-
-    stage("Build Lib"){
-      steps {
-        script {
-          docker.image('dvitali/tuna-builder:latest').inside() {
-            sh "mkdir cmake-build-debug/"
-            sh "cd cmake-build-debug && cmake ../"
-            sh "cd cmake-build-debug && make"
-          }
-        }
-      }
-    }
   }
   post {
     failure {
