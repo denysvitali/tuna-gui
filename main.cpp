@@ -237,7 +237,12 @@ int main(int argc, char** argv) {
 
     light.link(&light4);
 
-	TunaGE::renderList.pass(&root);
+    Node* rootest = TunaGE::loadOVO("/home/raenilol/Documents/supsi/computer-graphics/cg_ovosdk/ovosdk.07r/examples/simple3dScene.ovo");
+    rootest->link(&camera1);
+
+    TunaGE::renderList.pass(rootest);
+
+//	TunaGE::renderList.pass(&root);
 
 	std::cout << "Library Version: " << TunaGE::version() << std::endl;
 	std::cout << "GUI Version: " << version() << std::endl;
