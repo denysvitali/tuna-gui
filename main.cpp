@@ -140,15 +140,15 @@ int main(int argc, char** argv) {
 	Camera camera1{"camera 1"};
 	Camera camera2{"camera 2"};
 
-	camera1.setCameraPos(glm::vec3(-0.0, 2.0f, -0.0f));  // Camera is at (0,2,10), in World Space
-	camera1.setCameraFront(glm::vec3(0.01f, -1.0f, 0.01f)); // looks in the direction
+	camera1.setCameraPos(glm::vec3(-0.0, 20.0f, -20.0f));  // Camera is at (0,2,10), in World Space
+	camera1.setCameraFront(glm::vec3(0.01f, 0.0f, 0.9f)); // looks in the direction
 	camera1.setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f)); // Head is up (set to 0,-1,0 to look upside-down)
-	camera1.setCameraSpeed(0.1f);
+	camera1.setCameraSpeed(2);
 
-	camera2.setCameraPos(glm::vec3(-0.0, 3.0f, -0.0f));  // Camera is at (0,2,10), in World Space
-	camera2.setCameraFront(glm::vec3(0.01f, -1.0f, 0.01f)); // looks in the direction
+	camera2.setCameraPos(glm::vec3(-0.0, 20.0f, -20.0f));  // Camera is at (0,2,10), in World Space
+	camera2.setCameraFront(glm::vec3(0.01f, 0.0f, 0.9f)); // looks in the direction
 	camera2.setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f)); // Head is up (set to 0,-1,0 to look upside-down)
-	camera2.setCameraSpeed(0.1f);
+	camera2.setCameraSpeed(2);
 
 	Mesh mesh{ "plane" };
 
@@ -237,9 +237,15 @@ int main(int argc, char** argv) {
 
     light.link(&light4);
 
-    Node* rootest = TunaGE::loadOVO("/home/raenilol/Documents/supsi/computer-graphics/cg_ovosdk/ovosdk.07r/examples/simple3dScene.ovo");
-    rootest->link(&camera1);
+    Node* rootest;
+#if _WINDOWS
+    rootest = TunaGE::loadOVO("../tuna-ge/assets/scenes/simple3dScene.ovo");
+#else
+    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/simple3dScene.ovo");
+#endif
 
+    rootest->link(&camera1);
+    rootest->getChildren().front()->link(&camera2);
     TunaGE::renderList.pass(rootest);
 
 //	TunaGE::renderList.pass(&root);
