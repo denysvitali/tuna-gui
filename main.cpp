@@ -85,7 +85,7 @@ void motionCallback(int mouseX, int mouseY){
 	front.y = sin(m_pitch);
 	front.z = sin(m_yaw) * cos(m_pitch);
 
-	std::cout << "Front: " << front.x << ", " << front.y << ", " << front.z << std::endl;
+	//std::cout << "Front: " << front.x << ", " << front.y << ", " << front.z << std::endl;
 	TunaGE::getCurrentCamera().setCameraFront(front);
 
 	//glutPostWindowRedisplay(windowId);
