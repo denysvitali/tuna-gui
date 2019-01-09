@@ -239,13 +239,13 @@ int main(int argc, char** argv) {
 
     Node* rootest;
 #if _WINDOWS
-    rootest = TunaGE::loadOVO("../tuna-ge/assets/scenes/simple3dScene.ovo");
+    rootest = TunaGE::loadOVO("D:/ProgettoGE/tuna/tuna-ge/assets/scenes/gauntlet.OVO");
 #else
     rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/simple3dScene.ovo");
 #endif
 
     rootest->link(&camera1);
-    rootest->getChildren().front()->link(&camera2);
+    //rootest->getChildren().front()->getChildren().front()->getChildren().front()->link(&camera2);
     TunaGE::renderList.pass(rootest);
 
 //	TunaGE::renderList.pass(&root);
