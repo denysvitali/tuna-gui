@@ -271,12 +271,16 @@ int main(int argc, char** argv) {
 #if _WINDOWS
     rootest = TunaGE::loadOVO("../tuna-ge/assets/scenes/gauntlet.OVO");
 #else
-    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/OvO.ovo");
+    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntlet.ovo");
 #endif
 
     rootest->link(&camera1);
 
     TunaGE::renderList.pass(rootest);
+	TunaGE::makeReflective(rootest->getSceneElementByName("Plane001"));
+
+
+    TunaGE::setFrameRate(true);
 
 	std::cout << "Library Version: " << TunaGE::version() << std::endl;
 	std::cout << "GUI Version: " << version() << std::endl;
