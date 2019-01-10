@@ -255,7 +255,7 @@ int main(int argc, char** argv) {
 #if _WINDOWS
     rootest = TunaGE::loadOVO("D:/ProgettoGE/tuna/tuna-ge/assets/scenes/gauntlet.OVO");
 #else
-    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/OvO.ovo");
+    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntlet.ovo");
 #endif
 
     rootest->link(&camera1);
