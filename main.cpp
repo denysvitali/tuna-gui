@@ -85,6 +85,7 @@ void motionCallback(int mouseX, int mouseY){
 	front.z = sin(m_yaw) * cos(m_pitch);
 
 	TunaGE::getCurrentCamera()->setCameraFront(front);
+	TunaGE::redisplay();
 
 	//glutPostWindowRedisplay(windowId);
 }
@@ -213,6 +214,8 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		default:
 			break;
     }
+
+    TunaGE::redisplay();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,7 +255,7 @@ int main(int argc, char** argv) {
 #if _WINDOWS
     rootest = TunaGE::loadOVO("D:/ProgettoGE/tuna/tuna-ge/assets/scenes/gauntlet.OVO");
 #else
-    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/simple3dScene.ovo");
+    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/OvO.ovo");
 #endif
 
     rootest->link(&camera1);
