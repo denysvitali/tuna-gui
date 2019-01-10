@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cstring>
+#include <iomanip>
 
 #ifdef _WINDOWS
 	#include <Windows.h>
@@ -93,8 +94,23 @@ void motionCallback(int mouseX, int mouseY){
 
 
 void kbdCB(unsigned char c, int mouseX, int mouseY) {
+
+	std::string c13n = "Capsule013";
+	std::string c14n = "Capsule014";
+
+	std::vector<Node*> capsules;
+
+	Node* root = TunaGE::renderList.getSceneRoot();
+	if (root != nullptr) {
+		for(int i=1; i<=15; i++){
+			std::stringstream cSS{};
+			cSS << "Capsule" << std::setfill('0') << std::setw(3) << i;
+			capsules.push_back(root->getSceneElementByName(cSS.str().data()));
+		}
+	}
+
+
 	Camera* camera = TunaGE::getCurrentCamera();
-	Node* root;
     switch (c) {
         case 'w':
             camera->setCameraPos(camera->getCameraPos() + (camera->getCameraSpeed() * camera->getCameraFront()));
@@ -114,9 +130,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case '6':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule013")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule013")->getMatrix(), glm::radians(1.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule013")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule013")->getMatrix(), glm::radians(-0.5f), glm::vec3(0, 1, 0)));
-				root->getSceneElementByName("Capsule014")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule014")->getMatrix(), glm::radians(1.0f), glm::vec3(1, 0, 0)));
+				capsules[12]->setMatrix(glm::rotate(capsules[12]->getMatrix(), glm::radians(1.0f), glm::vec3(1, 0, 0)));
+				capsules[12]->setMatrix(glm::rotate(capsules[12]->getMatrix(), glm::radians(-0.5f), glm::vec3(0, 1, 0)));
+				capsules[13]->setMatrix(glm::rotate(capsules[13]->getMatrix(), glm::radians(1.0f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -124,9 +140,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case 'z':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule013")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule013")->getMatrix(), glm::radians(-1.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule013")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule013")->getMatrix(), glm::radians(0.5f), glm::vec3(0, 1, 0)));
-				root->getSceneElementByName("Capsule014")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule014")->getMatrix(), glm::radians(-1.0f), glm::vec3(1, 0, 0)));
+				capsules[12]->setMatrix(glm::rotate(capsules[12]->getMatrix(), glm::radians(-1.0f), glm::vec3(1, 0, 0)));
+				capsules[12]->setMatrix(glm::rotate(capsules[12]->getMatrix(), glm::radians(0.5f), glm::vec3(0, 1, 0)));
+				capsules[13]->setMatrix(glm::rotate(capsules[13]->getMatrix(), glm::radians(-1.0f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -134,9 +150,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case '7':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule010")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule010")->getMatrix(), glm::radians(1.5f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule011")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule011")->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule012")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule012")->getMatrix(), glm::radians(2.0f), glm::vec3(1, 0, 0)));
+				capsules[9]->setMatrix(glm::rotate(capsules[9]->getMatrix(), glm::radians(1.5f), glm::vec3(1, 0, 0)));
+				capsules[10]->setMatrix(glm::rotate(capsules[10]->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
+				capsules[11]->setMatrix(glm::rotate(capsules[11]->getMatrix(), glm::radians(2.0f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -144,9 +160,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case 'u':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule010")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule010")->getMatrix(), glm::radians(-1.5f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule011")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule011")->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule012")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule012")->getMatrix(), glm::radians(-2.0f), glm::vec3(1, 0, 0)));
+				capsules[9]->setMatrix(glm::rotate(capsules[9]->getMatrix(), glm::radians(-1.5f), glm::vec3(1, 0, 0)));
+				capsules[10]->setMatrix(glm::rotate(capsules[10]->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
+				capsules[11]->setMatrix(glm::rotate(capsules[11]->getMatrix(), glm::radians(-2.0f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -154,9 +170,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case '8':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule007")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule007")->getMatrix(), glm::radians(1.5f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule008")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule008")->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule009")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule009")->getMatrix(), glm::radians(2.0f), glm::vec3(1, 0, 0)));
+				capsules[6]->setMatrix(glm::rotate(capsules[6]->getMatrix(), glm::radians(1.5f), glm::vec3(1, 0, 0)));
+				capsules[7]->setMatrix(glm::rotate(capsules[7]->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
+				capsules[8]->setMatrix(glm::rotate(capsules[8]->getMatrix(), glm::radians(2.0f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -164,9 +180,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case 'i':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule007")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule007")->getMatrix(), glm::radians(-1.5f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule008")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule008")->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule009")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule009")->getMatrix(), glm::radians(-2.0f), glm::vec3(1, 0, 0)));
+				capsules[6]->setMatrix(glm::rotate(capsules[6]->getMatrix(), glm::radians(-1.5f), glm::vec3(1, 0, 0)));
+				capsules[7]->setMatrix(glm::rotate(capsules[7]->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
+				capsules[8]->setMatrix(glm::rotate(capsules[8]->getMatrix(), glm::radians(-2.0f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -174,9 +190,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case '9':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule004")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule004")->getMatrix(), glm::radians(1.2f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule005")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule005")->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule006")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule006")->getMatrix(), glm::radians(1.8f), glm::vec3(1, 0, 0)));
+				capsules[3]->setMatrix(glm::rotate(capsules[3]->getMatrix(), glm::radians(1.2f), glm::vec3(1, 0, 0)));
+				capsules[4]->setMatrix(glm::rotate(capsules[4]->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
+				capsules[5]->setMatrix(glm::rotate(capsules[5]->getMatrix(), glm::radians(1.8f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -184,9 +200,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case 'o':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule004")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule004")->getMatrix(), glm::radians(-1.2f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule005")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule005")->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule006")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule006")->getMatrix(), glm::radians(-1.8f), glm::vec3(1, 0, 0)));
+				capsules[3]->setMatrix(glm::rotate(capsules[3]->getMatrix(), glm::radians(-1.2f), glm::vec3(1, 0, 0)));
+				capsules[4]->setMatrix(glm::rotate(capsules[4]->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
+				capsules[5]->setMatrix(glm::rotate(capsules[5]->getMatrix(), glm::radians(-1.8f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -194,9 +210,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case '0':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule001")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule001")->getMatrix(), glm::radians(1.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule002")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule002")->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule003")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule003")->getMatrix(), glm::radians(1.7f), glm::vec3(1, 0, 0)));
+				capsules[0]->setMatrix(glm::rotate(capsules[0]->getMatrix(), glm::radians(1.0f), glm::vec3(1, 0, 0)));
+				capsules[1]->setMatrix(glm::rotate(capsules[1]->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
+				capsules[2]->setMatrix(glm::rotate(capsules[2]->getMatrix(), glm::radians(1.7f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -204,9 +220,9 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case 'p':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule001")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule001")->getMatrix(), glm::radians(-1.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule002")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule002")->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
-				root->getSceneElementByName("Capsule003")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule003")->getMatrix(), glm::radians(-1.7f), glm::vec3(1, 0, 0)));
+				capsules[0]->setMatrix(glm::rotate(capsules[0]->getMatrix(), glm::radians(-1.0f), glm::vec3(1, 0, 0)));
+				capsules[1]->setMatrix(glm::rotate(capsules[1]->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
+				capsules[2]->setMatrix(glm::rotate(capsules[2]->getMatrix(), glm::radians(-1.7f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clear();
 				TunaGE::renderList.pass(root);
 			}
@@ -253,7 +269,7 @@ int main(int argc, char** argv) {
     Node* rootest;
 
 #if _WINDOWS
-    rootest = TunaGE::loadOVO("D:/ProgettoGE/tuna/tuna-ge/assets/scenes/gauntlet.OVO");
+    rootest = TunaGE::loadOVO("../tuna-ge/assets/scenes/gauntlet.OVO");
 #else
     rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/OvO.ovo");
 #endif
