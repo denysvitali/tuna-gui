@@ -243,12 +243,12 @@ int main(int argc, char** argv) {
 	camera1.setCameraPos(glm::vec3(142.0f, 135.0f, 0.0f));
 	camera1.setCameraFront(glm::vec3(-1.0f, -0.30f, 0.01f));
 	camera1.setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	camera1.setCameraSpeed(2);
+	camera1.setCameraSpeed(3);
 
 	camera2.setCameraPos(glm::vec3(-0.0, 20.0f, -20.0f));
 	camera2.setCameraFront(glm::vec3(0.01f, 0.0f, 0.9f));
 	camera2.setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	camera2.setCameraSpeed(2);
+	camera2.setCameraSpeed(3);
 
     Node* rootest;
 
@@ -259,7 +259,10 @@ int main(int argc, char** argv) {
 #endif
 
     rootest->link(&camera1);
-
+	//((Mesh*)rootest->getSceneElementByName("Plane001"))->getMaterial().setAlpha(0.2f);
+	rootest->getSceneElementByName("Cylinder001")->setFlipScene(true);
+	rootest->getSceneElementByName("Omni001")->setFlipScene(true);
+	rootest->getSceneElementByName("Spot001")->setFlipScene(true);
     TunaGE::renderList.pass(rootest);
 
 	std::cout << "Library Version: " << TunaGE::version() << std::endl;
