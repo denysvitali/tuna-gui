@@ -63,7 +63,7 @@ void motionCallback(int mouseX, int mouseY){
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
-	glm::vec3 front = TunaGE::getCurrentCamera()->getCameraFront();
+	glm::vec3 front = TunaGE::getCurrentCamera()->getFront();
 
 	glm::vec3 f2 = glm::normalize(front);
 	double m_pitch = asin(f2.y);
@@ -84,7 +84,7 @@ void motionCallback(int mouseX, int mouseY){
 	front.y = sin(m_pitch);
 	front.z = sin(m_yaw) * cos(m_pitch);
 
-	TunaGE::getCurrentCamera()->setCameraFront(front);
+	TunaGE::getCurrentCamera()->setFront(front);
 	TunaGE::redisplay();
 
 	//glutPostWindowRedisplay(windowId);
@@ -94,19 +94,20 @@ void motionCallback(int mouseX, int mouseY){
 
 void kbdCB(unsigned char c, int mouseX, int mouseY) {
 	Camera* camera = TunaGE::getCurrentCamera();
+	float cameraSpeed = 3.0f;
 	Node* root;
     switch (c) {
         case 'w':
-            camera->setCameraPos(camera->getCameraPos() + (camera->getCameraSpeed() * camera->getCameraFront()));
+            camera->setPos(camera->getPos() + (cameraSpeed * camera->getFront()));
             break;
         case 's':
-            camera->setCameraPos(camera->getCameraPos() - (camera->getCameraSpeed() * camera->getCameraFront()));
+            camera->setPos(camera->getPos() - (cameraSpeed * camera->getFront()));
             break;
         case 'd':
-            camera->setCameraPos(camera->getCameraPos() + (glm::normalize(glm::cross(camera->getCameraFront(), camera->getCameraUp()))*camera->getCameraSpeed()));
+            camera->setPos(camera->getPos() + (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
             break;
         case 'a':
-            camera->setCameraPos(camera->getCameraPos() - (glm::normalize(glm::cross(camera->getCameraFront(), camera->getCameraUp()))*camera->getCameraSpeed()));
+            camera->setPos(camera->getPos() - (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
             break;
 		case 'c':
 			TunaGE::renderList.switchCamera();
@@ -240,16 +241,14 @@ int main(int argc, char** argv) {
 	Camera* camera1 = new Camera("camera 1");
 	Camera* camera2 = new Camera("camera 2");
 
-	camera1->setCameraPos(glm::vec3(142.0f, 135.0f, 0.0f));
-	camera1->setCameraFront(glm::vec3(-1.0f, -0.30f, 0.01f));
-	camera1->setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	camera1->setCameraSpeed(3);
-
-	camera2->setCameraPos(glm::vec3(-0.0, 20.0f, -20.0f));
-	camera2->setCameraFront(glm::vec3(0.0f, 1.0f, 0.0f));
-	camera2->setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	camera2->setCameraSpeed(3);
-
+	camera1->setPos(glm::vec3(142.0f, 135.0f, 0.0f));
+	camera1->setFront(glm::vec3(-1.0f, -0.30f, 0.01f));
+	camera1->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	
+	camera2->setPos(glm::vec3(-0.0, 20.0f, -20.0f));
+	camera2->setFront(glm::vec3(0.0f, 1.0f, 0.0f));
+	camera2->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	
     Node* rootest;
 
 #if _WINDOWS
