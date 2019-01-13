@@ -34,6 +34,7 @@ bool firstMouse = true;
 double lastX = 0;
 double lastY = 0;
 
+//	Callback used to set a flag on mouse release
 void mouseCallback(int button, int state, int mouseX, int mouseY) {
 
 	switch (state)
@@ -45,7 +46,7 @@ void mouseCallback(int button, int state, int mouseX, int mouseY) {
 			break;
 	}
 }
-
+//	Callbacks used to bind the mouse movements to the camera yaw and pitch movements
 void motionCallback(int mouseX, int mouseY){
 
 	if (firstMouse) {
@@ -86,12 +87,9 @@ void motionCallback(int mouseX, int mouseY){
 
 	TunaGE::getCurrentCamera()->setFront(front);
 	TunaGE::redisplay();
-
-	//glutPostWindowRedisplay(windowId);
 }
 
-
-
+//	Callback used to move the camera, move the fingers of the gauntlet and toggle some settings via keyboard
 void kbdCB(unsigned char c, int mouseX, int mouseY) {
 	Camera* camera = TunaGE::getCurrentCamera();
 	float cameraSpeed = 3.0f;
@@ -195,7 +193,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case '0':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule001")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule001")->getMatrix(), glm::radians(1.0f), glm::vec3(1, 0, 0)));
+				root->getSceneElementByName("Capsule001")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule001")->getMatrix(), glm::radians(1.2f), glm::vec3(1, 0, 0)));
 				root->getSceneElementByName("Capsule002")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule002")->getMatrix(), glm::radians(5.0f), glm::vec3(1, 0, 0)));
 				root->getSceneElementByName("Capsule003")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule003")->getMatrix(), glm::radians(1.7f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clearRenderElements();
@@ -205,17 +203,40 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 		case 'p':
 			root = TunaGE::renderList.getSceneRoot();
 			if (root != nullptr) {
-				root->getSceneElementByName("Capsule001")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule001")->getMatrix(), glm::radians(-1.0f), glm::vec3(1, 0, 0)));
+				root->getSceneElementByName("Capsule001")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule001")->getMatrix(), glm::radians(-1.2f), glm::vec3(1, 0, 0)));
 				root->getSceneElementByName("Capsule002")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule002")->getMatrix(), glm::radians(-5.0f), glm::vec3(1, 0, 0)));
 				root->getSceneElementByName("Capsule003")->setMatrix(glm::rotate(root->getSceneElementByName("Capsule003")->getMatrix(), glm::radians(-1.7f), glm::vec3(1, 0, 0)));
 				TunaGE::renderList.clearRenderElements();
 				TunaGE::renderList.pass(root);
 			}
 			break;
+		case 'k':
+			TunaGE::setLightning(false);
+			break;
+		case 'l':
+			TunaGE::setLightning(true);
+			break;
+		case 'n':
+			TunaGE::wireframeMode(false);
+			break;
+		case 'm':
+			TunaGE::wireframeMode(true);
+			break;
+		case 'v':
+			root = TunaGE::renderList.getSceneRoot();
+			root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(-2, 0, 0)));
+			TunaGE::renderList.clearRenderElements();
+			TunaGE::renderList.pass(root);
+			break;
+		case 'b':
+			root = TunaGE::renderList.getSceneRoot();
+			root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(2, 0, 0)));
+			TunaGE::renderList.clearRenderElements();
+			TunaGE::renderList.pass(root);
+			break;
 		default:
 			break;
     }
-
     TunaGE::redisplay();
 }
 
@@ -232,38 +253,44 @@ int main(int argc, char** argv) {
 		}
 	}
 
+	//	Setting Callbacks
 	TunaGE::setMotionCallback(motionCallback);
 	TunaGE::setMouseCallback(mouseCallback);
 	TunaGE::setKeyboardCallback(kbdCB);
 
+	//	Init engine
 	TunaGE::init();
 
+	//	Creating cameras
 	Camera* camera1 = new Camera("camera 1");
 	Camera* camera2 = new Camera("camera 2");
-
 	camera1->setPos(glm::vec3(142.0f, 135.0f, 0.0f));
 	camera1->setFront(glm::vec3(-1.0f, -0.30f, 0.01f));
 	camera1->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	
-	camera2->setPos(glm::vec3(-0.0, 20.0f, -20.0f));
-	camera2->setFront(glm::vec3(0.0f, 1.0f, 0.0f));
+	camera2->setPos(glm::vec3(0.0, 20.0f, 30.0f));
+	camera2->setFront(glm::vec3(0.0f, 0.0f, -1.0f));
 	camera2->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	
     Node* rootest;
-
+	//	Extract root of scene from an OvO file
 #if _WINDOWS
-    rootest = TunaGE::loadOVO("D:/ProgettoGE/tuna/tuna-ge/assets/scenes/gauntlet.OVO");
+    rootest = TunaGE::loadOVO("D:/ProgettoGE/tuna/tuna-ge/assets/scenes/gauntletTex.OVO");
 #else
     rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntlet.ovo");
 #endif
-
+	//	Add cameras to the scene
     rootest->link(camera1);
 	rootest->getSceneElementByName("Omni001")->link(camera2);
+	//	Set the mirror flag on the Cylinder supporting the gauntlet, this will make it and all his subnodes mirror at y=0
 	rootest->getSceneElementByName("Cylinder001")->setFlipScene(true);
+	//	Pass the scene on the render list
     TunaGE::renderList.pass(rootest);
 
+	//	Show version
 	std::cout << "Library Version: " << TunaGE::version() << std::endl;
 	std::cout << "GUI Version: " << version() << std::endl;
+	//	Enter main loop
 	TunaGE::loop();
+	//	Deallocate resources and the scene
 	TunaGE::free();
 }
