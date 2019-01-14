@@ -288,7 +288,7 @@ int main(int argc, char** argv) {
     TunaGE::renderList.pass(rootest);
 
 	//	Show version
-	std::cout << "Library Version: " << TunaGE::version() << std::endl;
+	std::cout << "Library Version: " << TunaGE::version().data() << std::endl;
 	std::cout << "GUI Version: " << version() << std::endl;
 	//	Enter main loop
 	TunaGE::loop();
