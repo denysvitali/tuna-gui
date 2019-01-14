@@ -3,11 +3,9 @@ project(tuna_gui)
 
 set(CMAKE_CXX_STANDARD 14)
 set(GIT_EXECUTABLE git)
-set(CMAKE_CXX_COMPILER clang++)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     add_definitions(-DDEBUG=1)
-    set(CMAKE_CXX_FLAGS -fsanitize=address)
 endif()
 
 execute_process(COMMAND
