@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{FCB3E3A4-E649-4CC0-B4C7-38F8DCD0DD9E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -83,6 +83,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -101,6 +102,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -118,6 +120,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -133,6 +136,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <PreBuildEvent>
       <Command>powershell -ExecutionPolicy Unrestricted $(ProjectDir)generate-version.ps1</Command>
@@ -141,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="version.cc" />
+    <ClCompile Include="version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="version.hh" />

@@ -21,6 +21,9 @@
     <ClCompile Include="version.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="version.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="version.hh">

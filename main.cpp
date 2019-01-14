@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cstring>
+#include <iomanip>
 
 #ifdef _WINDOWS
 	#include <Windows.h>
@@ -270,13 +271,13 @@ int main(int argc, char** argv) {
 	camera2->setPos(glm::vec3(0.0, 20.0f, 30.0f));
 	camera2->setFront(glm::vec3(0.0f, 0.0f, -1.0f));
 	camera2->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	
+
     Node* rootest;
 	//	Extract root of scene from an OvO file
 #if _WINDOWS
     rootest = TunaGE::loadOVO("D:/ProgettoGE/tuna/tuna-ge/assets/scenes/gauntletTex.OVO");
 #else
-    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntlet.ovo");
+    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.OVO");
 #endif
 	//	Add cameras to the scene
     rootest->link(camera1);
