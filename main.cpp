@@ -275,9 +275,9 @@ int main(int argc, char** argv) {
     Node* rootest;
 	//	Extract root of scene from an OvO file
 #if _WINDOWS
-    rootest = TunaGE::loadOVO("D:/ProgettoGE/tuna/tuna-ge/assets/scenes/gauntletTex.OVO");
+    rootest = TunaGE::loadOVO("tuna-ge/assets/scenes/gauntletTex.ovo");
 #else
-    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.OVO");
+    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.ovo");
 #endif
 	//	Add cameras to the scene
     rootest->link(camera1);
