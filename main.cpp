@@ -35,6 +35,7 @@ Camera* camera2 = nullptr;
 bool lightning = true;
 bool wireframe = false;
 bool debug = false;
+bool fpsCounter = false;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////CALLBACKS///////////////////////////////////////////////
@@ -372,6 +373,11 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			}
 			break;
 
+    	case 'h':
+    		fpsCounter = !fpsCounter;
+    		TunaGE::setFPSCounter(fpsCounter);
+    		break;
+
     	case 'j':
     		debug = !debug;
     		TunaGE::setDebug(debug);
@@ -381,6 +387,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			lightning = !lightning;
 			TunaGE::setLightning(lightning);
 			break;
+
 		case 'l':
 			wireframe = !wireframe;
 			TunaGE::setWireframe(wireframe);
@@ -488,6 +495,7 @@ int main(int argc, char** argv) {
 	std::cout << "GUI Version: " << version() << std::endl;
 
 	TunaGE::setLoopCallback(loopCallback);
+	TunaGE::setFPSCounter(fpsCounter);
 
 
 	TunaGE::setLightning(lightning);
