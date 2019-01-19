@@ -93,20 +93,133 @@ void motionCallback(int mouseX, int mouseY){
 //	Callback used to move the camera, move the fingers of the gauntlet and toggle some settings via keyboard
 void kbdCB(unsigned char c, int mouseX, int mouseY) {
 	Camera* camera = TunaGE::getCurrentCamera();
-	float cameraSpeed = 3.0f;
+	float cameraSpeed = 4.0f;
 	Node* root;
+	float i;
+	glm::vec3 posBefore;
+	glm::vec3 relPos;
+	glm::vec3 posAfter;
     switch (c) {
         case 'w':
+			posBefore = camera->getPos();
             camera->setPos(camera->getPos() + (cameraSpeed * camera->getFront()));
+			relPos = camera->getRelativePosition();
+			posAfter = camera->getPos();
+			if (relPos[1] < 1) {
+				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[1] > 400) {
+				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[2] > 200) {
+				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[2] < -200) {
+				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[0] > 200) {
+				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[0] < -200) {
+				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+
             break;
         case 's':
+			posBefore = camera->getPos();
             camera->setPos(camera->getPos() - (cameraSpeed * camera->getFront()));
+			relPos = camera->getRelativePosition();
+			posAfter = camera->getPos();
+			if (relPos[1] < 1) {
+				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[1] > 400) {
+				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[2] > 200) {
+				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[2] < -200) {
+				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[0] > 200) {
+				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[0] < -200) {
+				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
             break;
         case 'd':
+			posBefore = camera->getPos();
             camera->setPos(camera->getPos() + (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
+			relPos = camera->getRelativePosition();
+			posAfter = camera->getPos();
+			if (relPos[1] < 1) {
+				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[1] > 400) {
+				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[2] > 200) {
+				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[2] < -200) {
+				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[0] > 200) {
+				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[0] < -200) {
+				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
             break;
         case 'a':
+			posBefore = camera->getPos();
             camera->setPos(camera->getPos() - (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
+			relPos = camera->getRelativePosition();
+			posAfter = camera->getPos();
+			if (relPos[1] < 1) {
+				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[1] > 400) {
+				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[2] > 200) {
+				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[2] < -200) {
+				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[0] > 200) {
+				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
+			if (relPos[0] < -200) {
+				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
+				camera->setPos(posAfter);
+			}
             break;
 		case 'c':
 			TunaGE::renderList.switchCamera();
@@ -268,20 +381,29 @@ int main(int argc, char** argv) {
 	camera1->setPos(glm::vec3(142.0f, 135.0f, 0.0f));
 	camera1->setFront(glm::vec3(-1.0f, -0.30f, 0.01f));
 	camera1->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	camera1->setFarPlane(1000);
 	camera2->setPos(glm::vec3(0.0, 20.0f, 30.0f));
 	camera2->setFront(glm::vec3(0.0f, 0.0f, -1.0f));
 	camera2->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	camera2->setFarPlane(1000);
 
+/*
+	char dir[FILENAME_MAX];
+	GetCurrentDir(dir, FILENAME_MAX);
+
+
+	std::cout << "Current dir: " << dir << std::endl;*/
     Node* rootest;
 	//	Extract root of scene from an OvO file
 #if _WINDOWS
-    rootest = TunaGE::loadOVO("tuna-ge/assets/scenes/gauntletTex.ovo");
+    rootest = TunaGE::loadOVO("../tuna-ge/assets/scenes/gauntlet.OVO");
 #else
-    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.ovo");
+    rootest = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.OVO");
 #endif
 	//	Add cameras to the scene
     rootest->link(camera1);
 	rootest->getSceneElementByName("Omni001")->link(camera2);
+	//dynamic_cast<Light*>(rootest->getSceneElementByName("Omni001"))->disable();
 	//	Set the mirror flag on the Cylinder supporting the gauntlet, this will make it and all his subnodes mirror at y=0
 	rootest->getSceneElementByName("Cylinder001")->setFlipScene(true);
 	//	Pass the scene on the render list
