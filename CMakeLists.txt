@@ -9,6 +9,10 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
     #set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -fsanitize=address")
 endif()
 
+if (CMAKE_BUILD_TYPE MATCHES Release)
+    add_compile_definitions(O7)
+endif()
+
 execute_process(COMMAND
         "${GIT_EXECUTABLE}" describe --match=NeVeRmAtCh --always --abbrev=7 --dirty
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
