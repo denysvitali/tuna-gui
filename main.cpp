@@ -148,7 +148,11 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 	glm::vec3 relPos;
 	glm::vec3 posAfter;
     switch (c) {
+    	case 'r':
+			rotationEnabled = !rotationEnabled;
+    		break;
         case 'w':
+            rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() + (cameraSpeed * camera->getFront()));
 			relPos = camera->getRelativePosition();
@@ -177,7 +181,6 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-
             break;
         case 's':
 			posBefore = camera->getPos();
@@ -448,7 +451,7 @@ int main(int argc, char** argv) {
 #if _WINDOWS
     root = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.ovo");
 #else
-    root = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.ovo");
+    root = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntlet.ovo");
 #endif
 
     if(root == nullptr){
