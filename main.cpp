@@ -47,13 +47,15 @@ double lastY = 0;
 
 float angleX = 0.0;
 
-bool rotationEnabled = true;
+bool rotationEnabled = false;
 glm::mat4 cylinder_initialMat;
 
 double cameraPosX = 0.0;
 double cameraPosY = 0.0;
 double cameraPosZ = 0.0;
 double cameraDistance = 200;
+
+RGBColor textColor = RGBColor(255, 0, 0);
 
 void loopCallback(){
 	if(rotationEnabled){
@@ -65,6 +67,8 @@ void loopCallback(){
 		camera1->setPos(glm::vec3(cameraPosX + cameraDistance * glm::sin(glm::radians(angleX)),  cameraPosY + 20, cameraPosZ + cameraDistance * glm::cos(glm::radians(angleX))));
 		angleX+= 2;
 	}
+
+	TunaGE::renderString(100, 100, FontType::BITMAP_TIMES_ROMAN_10, textColor, String{"Hello world :)"});
 }
 
 void printSceneHierarchy(Node* node, int spacing = 0){
@@ -84,11 +88,11 @@ void printSceneHierarchy(Node* node, int spacing = 0){
 	}
 }
 //	Callback used to set a flag on mouse release
-void mouseCallback(int button, int state, int mouseX, int mouseY) {
+void mouseCallback(Mouse::Button button, Button::State state, int mouseX, int mouseY) {
 
 	switch (state)
 	{
-		case 1:
+		case Button::State::UP:
 			firstMouse = true;
 			break;
 		default:
@@ -152,7 +156,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			rotationEnabled = !rotationEnabled;
     		break;
         case 'w':
-            rotationEnabled = false;
+			rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() + (cameraSpeed * camera->getFront()));
 			relPos = camera->getRelativePosition();
@@ -183,6 +187,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			}
             break;
         case 's':
+			rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() - (cameraSpeed * camera->getFront()));
 			relPos = camera->getRelativePosition();
@@ -213,6 +218,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			}
             break;
         case 'd':
+			rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() + (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
 			relPos = camera->getRelativePosition();
@@ -243,6 +249,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			}
             break;
         case 'a':
+			rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() - (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
 			relPos = camera->getRelativePosition();
@@ -451,7 +458,7 @@ int main(int argc, char** argv) {
 #if _WINDOWS
     root = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.ovo");
 #else
-    root = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntlet.ovo");
+    root = TunaGE::loadOVO("../../tuna-ge/assets/scenes/final.ovo");
 #endif
 
     if(root == nullptr){
@@ -465,24 +472,28 @@ int main(int argc, char** argv) {
 
 
     root->link(camera1);
-	root->getSceneElementByName("Omni001")->link(camera2);
+	//root->getSceneElementByName("OmniLight")->link(camera2);
 
 	//	Set the mirror flag on the Cylinder supporting the gauntlet, this will make it and all his subnodes mirror at y=0
-	cylinder = root->getSceneElementByName("Cylinder001");
+	cylinder = root->getSceneElementByName("Wrist");
 	cylinder->setFlipScene(true);
+	root->getSceneElementByName("BasePyramid")->setFlipScene(true);
 	cylinder_initialMat = cylinder->getMatrix();
 
-	box = root->getSceneElementByName("Box001");
+	((Mesh*)root->getSceneElementByName("Base"))->getMaterial()->setAlpha(0.75);
+
+	//box = root->getSceneElementByName("Box001");*/
 
 	TunaGE::renderList.pass(root);
 
-	for(int i=1; i<=15; i++){
+	/*for(int i=1; i<=15; i++){
 			std::stringstream cSS{};
 			cSS << "Capsule" << std::setfill('0') << std::setw(3) << i;
 			capsules.push_back(root->getSceneElementByName(cSS.str().data()));
-	}
+	}*/
 
-	camera1->lookAt(box);
+	//camera1->lookAt(box);
+	/*
 
 	glm::vec4 v4 = camera1->getLookAtNode()->getRenderMatrix() * glm::vec4(0,0,0,1);
 
@@ -492,6 +503,7 @@ int main(int argc, char** argv) {
 
 	camera1->setPos(glm::vec3(cameraPosX, cameraPosY, cameraPosZ));
 	camera1->setMode(CameraMode::LOOK_AT_NODE);
+	*/
 
 	//	Show version
 	std::cout << "Library Version: " << TunaGE::version().data() << std::endl;
