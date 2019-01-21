@@ -54,6 +54,7 @@ double cameraPosX = 0.0;
 double cameraPosY = 0.0;
 double cameraPosZ = 0.0;
 double cameraDistance = 200;
+double cameraDistance_Y = 20;
 
 RGBColor textColor = RGBColor(255, 0, 0);
 
@@ -64,11 +65,13 @@ void loopCallback(){
 		cameraPosX = v4.x;
 		cameraPosY = v4.y;
 		cameraPosZ = v4.z;
-		camera1->setPos(glm::vec3(cameraPosX + cameraDistance * glm::sin(glm::radians(angleX)),  cameraPosY + 20, cameraPosZ + cameraDistance * glm::cos(glm::radians(angleX))));
+		camera1->setPos(glm::vec3(cameraPosX + cameraDistance * glm::sin(glm::radians(angleX)),
+				cameraPosY + cameraDistance_Y,
+				cameraPosZ + cameraDistance * glm::cos(glm::radians(angleX))));
 		angleX+= 2;
 	}
 
-	TunaGE::renderString(100, 100, FontType::BITMAP_TIMES_ROMAN_10, textColor, String{"Hello world :)"});
+	//TunaGE::renderString(100, 100, FontType::BITMAP_TIMES_ROMAN_10, textColor, String{"Hello world :)"});
 }
 
 void printSceneHierarchy(Node* node, int spacing = 0){
@@ -455,14 +458,22 @@ int main(int argc, char** argv) {
 	camera2->setFarPlane(1000);
 
     Node* root;
+
+    std::string sceneName = "gauntletTex.ovo";
+    std::string path;
+
 #if _WINDOWS
-    root = TunaGE::loadOVO("../../tuna-ge/assets/scenes/gauntletTex.ovo");
+	path = "../../tuna-ge/assets/scenes/";
 #else
-    root = TunaGE::loadOVO("../../tuna-ge/assets/scenes/final.ovo");
+	path = "../../tuna-ge/assets/scenes/";
 #endif
 
-    if(root == nullptr){
+	path = path + sceneName;
+	root = TunaGE::loadOVO(path.data());
+
+	if(root == nullptr){
     	std::cerr << "Unable to open the scene file!" << std::endl;
+		TunaGE::free();
     	exit(1);
     }
 
@@ -472,28 +483,24 @@ int main(int argc, char** argv) {
 
 
     root->link(camera1);
-	//root->getSceneElementByName("OmniLight")->link(camera2);
+	root->getSceneElementByName("Omni001")->link(camera2);
 
 	//	Set the mirror flag on the Cylinder supporting the gauntlet, this will make it and all his subnodes mirror at y=0
-	cylinder = root->getSceneElementByName("Wrist");
+	cylinder = root->getSceneElementByName("Cylinder001");
+	box = root->getSceneElementByName("Box001");
 	cylinder->setFlipScene(true);
-	root->getSceneElementByName("BasePyramid")->setFlipScene(true);
 	cylinder_initialMat = cylinder->getMatrix();
 
-	((Mesh*)root->getSceneElementByName("Base"))->getMaterial()->setAlpha(0.75);
-
-	//box = root->getSceneElementByName("Box001");*/
 
 	TunaGE::renderList.pass(root);
 
-	/*for(int i=1; i<=15; i++){
+	for(int i=1; i<=15; i++){
 			std::stringstream cSS{};
 			cSS << "Capsule" << std::setfill('0') << std::setw(3) << i;
 			capsules.push_back(root->getSceneElementByName(cSS.str().data()));
-	}*/
+	}
 
-	//camera1->lookAt(box);
-	/*
+	camera1->lookAt(box);
 
 	glm::vec4 v4 = camera1->getLookAtNode()->getRenderMatrix() * glm::vec4(0,0,0,1);
 
@@ -501,9 +508,11 @@ int main(int argc, char** argv) {
 	cameraPosY = v4.y;
 	cameraPosZ = v4.z;
 
-	camera1->setPos(glm::vec3(cameraPosX, cameraPosY, cameraPosZ));
+	camera1->setPos(glm::vec3(cameraPosX + cameraDistance * glm::sin(0),
+			cameraPosY + cameraDistance_Y,
+			cameraPosZ + cameraDistance * glm::cos(0)));
 	camera1->setMode(CameraMode::LOOK_AT_NODE);
-	*/
+
 
 	//	Show version
 	std::cout << "Library Version: " << TunaGE::version().data() << std::endl;
