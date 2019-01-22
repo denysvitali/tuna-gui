@@ -33,6 +33,7 @@ Camera* camera1 = nullptr;
 Camera* camera2 = nullptr;
 
 bool lightning = true;
+bool culling = true;
 bool wireframe = false;
 bool debug = false;
 bool fpsCounter = false;
@@ -53,7 +54,7 @@ glm::mat4 cylinder_initialMat;
 double cameraPosX = 0.0;
 double cameraPosY = 0.0;
 double cameraPosZ = 0.0;
-double cameraDistance = 200;
+double cameraDistance = 180;
 double cameraDistance_Y = 20;
 
 RGBColor textColor = RGBColor(255, 0, 0);
@@ -152,9 +153,10 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 	Node* root;
 	float i;
 	glm::vec3 posBefore;
-	glm::vec3 relPos;
+	glm::vec3 absPos;
 	glm::vec3 posAfter;
-    switch (c) {
+	glm::vec3 absPosLight;
+	switch (c) {
     	case 'r':
 			rotationEnabled = !rotationEnabled;
     		break;
@@ -162,29 +164,29 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() + (cameraSpeed * camera->getFront()));
-			relPos = camera->getRelativePosition();
+			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
-			if (relPos[1] < 1) {
+			if (absPos[1] < 1) {
 				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[1] > 400) {
+			if (absPos[1] > 400) {
 				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[2] > 200) {
+			if (absPos[2] > 200) {
 				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[2] < -200) {
+			if (absPos[2] < -200) {
 				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[0] > 200) {
+			if (absPos[0] > 200) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[0] < -200) {
+			if (absPos[0] < -200) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
@@ -193,29 +195,29 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() - (cameraSpeed * camera->getFront()));
-			relPos = camera->getRelativePosition();
+			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
-			if (relPos[1] < 1) {
+			if (absPos[1] < 1) {
 				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[1] > 400) {
+			if (absPos[1] > 400) {
 				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[2] > 200) {
+			if (absPos[2] > 200) {
 				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[2] < -200) {
+			if (absPos[2] < -200) {
 				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[0] > 200) {
+			if (absPos[0] > 200) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[0] < -200) {
+			if (absPos[0] < -200) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
@@ -224,29 +226,29 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() + (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
-			relPos = camera->getRelativePosition();
+			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
-			if (relPos[1] < 1) {
+			if (absPos[1] < 1) {
 				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[1] > 400) {
+			if (absPos[1] > 400) {
 				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[2] > 200) {
+			if (absPos[2] > 200) {
 				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[2] < -200) {
+			if (absPos[2] < -200) {
 				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[0] > 200) {
+			if (absPos[0] > 200) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[0] < -200) {
+			if (absPos[0] < -200) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
@@ -255,29 +257,29 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			rotationEnabled = false;
 			posBefore = camera->getPos();
             camera->setPos(camera->getPos() - (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
-			relPos = camera->getRelativePosition();
+			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
-			if (relPos[1] < 1) {
+			if (absPos[1] < 1) {
 				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[1] > 400) {
+			if (absPos[1] > 400) {
 				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[2] > 200) {
+			if (absPos[2] > 200) {
 				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[2] < -200) {
+			if (absPos[2] < -200) {
 				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[0] > 200) {
+			if (absPos[0] > 200) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
-			if (relPos[0] < -200) {
+			if (absPos[0] < -200) {
 				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
 				camera->setPos(posAfter);
 			}
@@ -386,6 +388,11 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			}
 			break;
 
+		case 'g':
+			culling = !culling;
+			TunaGE::enableCulling(culling);
+			break;
+
     	case 'h':
     		fpsCounter = !fpsCounter;
     		TunaGE::setFPSCounter(fpsCounter);
@@ -407,16 +414,38 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			break;
 
 		case 'v':
+			posBefore = camera->getPos();
 			root = TunaGE::renderList.getSceneRoot();
 			root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(-2, 0, 0)));
+			absPosLight = root->getSceneElementByName("Omni001")->getRenderMatrix() * glm::vec4(0,0,0,1);
+			if(absPosLight[0] < -200){
+				root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(2, 0, 0)));
+				break;
+			}
 			TunaGE::renderList.clearRenderElements();
 			TunaGE::renderList.pass(root);
+			absPos = camera->getAbsolutePosition();
+			if (absPos[0] < -200) {
+				posAfter = glm::vec3(posBefore[0]+2, posBefore[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
 			break;
 		case 'b':
+			posBefore = camera->getPos();
 			root = TunaGE::renderList.getSceneRoot();
 			root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(2, 0, 0)));
+			absPosLight = root->getSceneElementByName("Omni001")->getRenderMatrix() * glm::vec4(0,0,0,1);
+			if(absPosLight[0] > 200){
+				root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(-2, 0, 0)));
+				break;
+			}
 			TunaGE::renderList.clearRenderElements();
 			TunaGE::renderList.pass(root);
+			absPos = camera->getAbsolutePosition();
+			if (absPos[0] > 200) {
+				posAfter = glm::vec3(posBefore[0]-2, posBefore[1], posBefore[2]);
+				camera->setPos(posAfter);
+			}
 			break;
 		default:
 			break;
@@ -459,7 +488,7 @@ int main(int argc, char** argv) {
 
     Node* root;
 
-    std::string sceneName = "gauntletTex.ovo";
+    std::string sceneName = "gauntlet.ovo";
     std::string path;
 
 #if _WINDOWS
@@ -477,17 +506,20 @@ int main(int argc, char** argv) {
     	exit(1);
     }
 
-	//	Add cameras to the scene
+	root->getSceneElementByName("Group001")->setFlipScene(true);
+	root->getSceneElementByName("Group001")->unlink();
+	//((Mesh*)root->getSceneElementByName("Plane001"))->getMaterial()->setAlpha(0.2);
 
 	printSceneHierarchy(root);
 
-
+	//	Add cameras to the scene
     root->link(camera1);
 	root->getSceneElementByName("Omni001")->link(camera2);
 
 	//	Set the mirror flag on the Cylinder supporting the gauntlet, this will make it and all his subnodes mirror at y=0
 	cylinder = root->getSceneElementByName("Cylinder001");
 	box = root->getSceneElementByName("Box001");
+	root->getSceneElementByName("Teapot001")->setFlipScene(true);
 	cylinder->setFlipScene(true);
 	cylinder_initialMat = cylinder->getMatrix();
 
@@ -520,8 +552,7 @@ int main(int argc, char** argv) {
 
 	TunaGE::setLoopCallback(loopCallback);
 	TunaGE::setFPSCounter(fpsCounter);
-
-
+	TunaGE::enableCulling(culling);
 	TunaGE::setLightning(lightning);
 	TunaGE::setWireframe(wireframe);
 	TunaGE::setDebug(debug);
