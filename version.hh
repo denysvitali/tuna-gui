@@ -2,8 +2,8 @@
 
 #include <string>
 
-#define GUI_MAJOR 1
-#define GUI_MINOR 0
+#define GUI_MAJOR 2
+#define GUI_MINOR 1
 #define GUI_PATCH 0
 
 namespace tunagui {
