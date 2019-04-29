@@ -1,10 +1,11 @@
 #ifdef _WINDOWS
+#include "stdafx.h"
 #include "version.hh"
 #else
-#include "../../tuna-gui/version.hh"
+#include "@CMAKE_CURRENT_SOURCE_DIR@/version.hh"
 #endif
 
 using namespace tunagui;
-const std::string Version::GIT_SHA1 = "c1c72f7-dirty";
-const std::string Version::GIT_DATE = "Sun Nov 18 16:29:53 2018";
-const std::string Version::GIT_COMMIT_SUBJECT = "Fix project path";
+const std::string& Version::GIT_SHA1 = "eb30ef1-dirty";
+const std::string& Version::GIT_DATE = "Wed Jan 23 10:04:34 2019";
+const std::string& Version::GIT_COMMIT_SUBJECT = "hotfix list refill every iteration";

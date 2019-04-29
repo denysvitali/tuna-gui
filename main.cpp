@@ -29,8 +29,7 @@ void doVersion(){
 std::vector<Node*> capsules;
 Node* cylinder = nullptr;
 Node* box = nullptr;
-Camera* camera1 = nullptr;
-Camera* camera2 = nullptr;
+Camera* mainCamera = nullptr;
 
 bool lightning = true;
 bool culling = true;
@@ -61,18 +60,16 @@ RGBColor textColor = RGBColor(255, 0, 0);
 
 void loopCallback(){
 	if(rotationEnabled){
-		glm::vec4 v4 = camera1->getLookAtNode()->getRenderMatrix() * glm::vec4(0,0,0,1);
+		/*glm::vec4 v4 = camera->getLookAtNode()->getRenderMatrix() * glm::vec4(0,0,0,1);
 
 		cameraPosX = v4.x;
 		cameraPosY = v4.y;
 		cameraPosZ = v4.z;
-		camera1->setPos(glm::vec3(cameraPosX + cameraDistance * glm::sin(glm::radians(angleX)),
+		camera->setPos(glm::vec3(cameraPosX + cameraDistance * glm::sin(glm::radians(angleX)),
 				cameraPosY + cameraDistance_Y,
 				cameraPosZ + cameraDistance * glm::cos(glm::radians(angleX))));
-		angleX+= 2;
+		angleX+= 2;*/
 	}
-
-	//TunaGE::renderString(100, 100, FontType::BITMAP_TIMES_ROMAN_10, textColor, String{"Hello world :)"});
 }
 
 void printSceneHierarchy(Node* node, int spacing = 0){
@@ -149,7 +146,7 @@ void motionCallback(int mouseX, int mouseY){
 //	Callback used to move the camera, move the fingers of the gauntlet and toggle some settings via keyboard
 void kbdCB(unsigned char c, int mouseX, int mouseY) {
 	Camera* camera = TunaGE::getCurrentCamera();
-	float cameraSpeed = 4.0f;
+	float cameraSpeed = 0.3f;
 	Node* root;
 	float i;
 	glm::vec3 posBefore;
@@ -166,30 +163,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
             camera->setPos(camera->getPos() + (cameraSpeed * camera->getFront()));
 			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
-			if (absPos[1] < 1) {
-				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[1] > 400) {
-				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[2] > 200) {
-				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[2] < -200) {
-				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[0] > 200) {
-				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[0] < -200) {
-				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
+			
             break;
         case 's':
 			rotationEnabled = false;
@@ -197,30 +171,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
             camera->setPos(camera->getPos() - (cameraSpeed * camera->getFront()));
 			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
-			if (absPos[1] < 1) {
-				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[1] > 400) {
-				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[2] > 200) {
-				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[2] < -200) {
-				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[0] > 200) {
-				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[0] < -200) {
-				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
+			
             break;
         case 'd':
 			rotationEnabled = false;
@@ -228,30 +179,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
             camera->setPos(camera->getPos() + (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
 			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
-			if (absPos[1] < 1) {
-				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[1] > 400) {
-				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[2] > 200) {
-				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[2] < -200) {
-				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[0] > 200) {
-				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[0] < -200) {
-				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
+			
             break;
         case 'a':
 			rotationEnabled = false;
@@ -259,30 +187,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
             camera->setPos(camera->getPos() - (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
 			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
-			if (absPos[1] < 1) {
-				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[1] > 400) {
-				posAfter = glm::vec3(posAfter[0], posBefore[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[2] > 200) {
-				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[2] < -200) {
-				posAfter = glm::vec3(posAfter[0], posAfter[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[0] > 200) {
-				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
-			if (absPos[0] < -200) {
-				posAfter = glm::vec3(posBefore[0], posAfter[1], posAfter[2]);
-				camera->setPos(posAfter);
-			}
+	
             break;
 		case 'c':
 			TunaGE::renderList.switchCamera();
@@ -372,37 +277,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 			wireframe = !wireframe;
 			TunaGE::setWireframe(wireframe);
 			break;
-
-		case 'v':
-			posBefore = camera->getPos();
-			root = TunaGE::renderList.getSceneRoot();
-			root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(-2, 0, 0)));
-			absPosLight = root->getSceneElementByName("Omni001")->getRenderMatrix() * glm::vec4(0,0,0,1);
-			if(absPosLight[0] < -200){
-				root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(2, 0, 0)));
-				break;
-			}
-			absPos = camera->getAbsolutePosition();
-			if (absPos[0] < -200) {
-				posAfter = glm::vec3(posBefore[0]+2, posBefore[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			break;
-		case 'b':
-			posBefore = camera->getPos();
-			root = TunaGE::renderList.getSceneRoot();
-			root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(2, 0, 0)));
-			absPosLight = root->getSceneElementByName("Omni001")->getRenderMatrix() * glm::vec4(0,0,0,1);
-			if(absPosLight[0] > 200){
-				root->getSceneElementByName("Omni001")->setMatrix(glm::translate(root->getSceneElementByName("Omni001")->getMatrix(), glm::vec3(-2, 0, 0)));
-				break;
-			}
-			absPos = camera->getAbsolutePosition();
-			if (absPos[0] > 200) {
-				posAfter = glm::vec3(posBefore[0]-2, posBefore[1], posBefore[2]);
-				camera->setPos(posAfter);
-			}
-			break;
+		
 		default:
 			break;
     }
@@ -431,20 +306,17 @@ int main(int argc, char** argv) {
 	TunaGE::init();
 
 	//	Creating cameras
-	camera1 = new Camera("camera 1");
-	camera2 = new Camera("camera 2");
-	camera1->setPos(glm::vec3(142.0f, 135.0f, 0.0f));
-	camera1->setFront(glm::vec3(-1.0f, -0.30f, 0.01f));
-	camera1->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	camera1->setFarPlane(1000);
-	camera2->setPos(glm::vec3(0.0, 20.0f, 30.0f));
-	camera2->setFront(glm::vec3(0.0f, 0.0f, -1.0f));
-	camera2->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
-	camera2->setFarPlane(1000);
+	
+	mainCamera = new Camera("mainCamera");
+	
+	mainCamera->setPos(glm::vec3(0.0f, 0.0f, 0.0f));
+	mainCamera->setFront(glm::vec3(0.0f, 0.0f, -1.0f));
+	mainCamera->setUp(glm::vec3(0.0f, 1.0f, 0.0f));
+	mainCamera->setFarPlane(1000);
 
     Node* root;
 
-    std::string sceneName = "gauntlet.ovo";
+    std::string sceneName = "ScaledTest.OVO";
     std::string path;
 
 #if _WINDOWS
@@ -455,53 +327,46 @@ int main(int argc, char** argv) {
 
 	path = path + sceneName;
 	root = TunaGE::loadOVO(path.data());
+	Node* newNode = new Node();
 
 	if(root == nullptr){
     	std::cerr << "Unable to open the scene file!" << std::endl;
 		TunaGE::free();
     	exit(1);
     }
-
+	newNode->link(root);
+	
 	root->getSceneElementByName("Group001")->setFlipScene(true);
-	root->getSceneElementByName("Group001")->unlink();
+	Node* divano = root->getSceneElementByName("Group001")->unlink();
+	root->getSceneElementByName("Plane002")->unlink();
+	root->getSceneElementByName("Plane003")->unlink();
+	root->getSceneElementByName("Plane004")->unlink();
+	root->getSceneElementByName("Plane005")->unlink();
+	root->getSceneElementByName("Plane006")->unlink();
+
 	//((Mesh*)root->getSceneElementByName("Plane001"))->getMaterial()->setAlpha(0.2);
 
 	printSceneHierarchy(root);
 
-	//	Add cameras to the scene
-    root->link(camera1);
-	root->getSceneElementByName("Omni001")->link(camera2);
+	newNode->link(mainCamera);
 
 	//	Set the mirror flag on the Cylinder supporting the gauntlet, this will make it and all his subnodes mirror at y=0
 	cylinder = root->getSceneElementByName("Cylinder001");
 	box = root->getSceneElementByName("Box001");
+
 	root->getSceneElementByName("Teapot001")->setFlipScene(true);
 	cylinder->setFlipScene(true);
 	cylinder_initialMat = cylinder->getMatrix();
 
 
-	TunaGE::renderList.pass(root);
+	TunaGE::renderList.pass(newNode);
 
 	for(int i=1; i<=15; i++){
 			std::stringstream cSS{};
 			cSS << "Capsule" << std::setfill('0') << std::setw(3) << i;
 			capsules.push_back(root->getSceneElementByName(cSS.str().data()));
 	}
-
-	camera1->lookAt(box);
-
-	glm::vec4 v4 = camera1->getLookAtNode()->getRenderMatrix() * glm::vec4(0,0,0,1);
-
-	cameraPosX = v4.x;
-	cameraPosY = v4.y;
-	cameraPosZ = v4.z;
-
-	camera1->setPos(glm::vec3(cameraPosX + cameraDistance * glm::sin(0),
-			cameraPosY + cameraDistance_Y,
-			cameraPosZ + cameraDistance * glm::cos(0)));
-	camera1->setMode(CameraMode::LOOK_AT_NODE);
-
-
+	
 	//	Show version
 	std::cout << "Library Version: " << TunaGE::version().data() << std::endl;
 	std::cout << "GUI Version: " << version() << std::endl;
