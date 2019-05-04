@@ -118,29 +118,37 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\LeapSDK\include;$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64\Leap.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>powershell -ExecutionPolicy Unrestricted $(ProjectDir)generate-version.ps1</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /yr "D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64\Leap.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64\Leap.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\LeapSDK\include;$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <PreBuildEvent>
       <Command>powershell -ExecutionPolicy Unrestricted $(ProjectDir)generate-version.ps1</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /yr "D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64\Leap.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

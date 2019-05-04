@@ -3,6 +3,7 @@
 #include <sstream>
 #include <cstring>
 #include <iomanip>
+#include "Leap.h"
 
 #ifdef _WINDOWS
 	#include <Windows.h>
@@ -160,7 +161,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
         case 'w':
 			rotationEnabled = false;
 			posBefore = camera->getPos();
-            camera->setPos(camera->getPos() + (cameraSpeed * camera->getFront()));
+            camera->setPos(camera->getPos() + (cameraSpeed * camera->getAdditionalFront()));
 			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
 			
@@ -168,7 +169,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
         case 's':
 			rotationEnabled = false;
 			posBefore = camera->getPos();
-            camera->setPos(camera->getPos() - (cameraSpeed * camera->getFront()));
+            camera->setPos(camera->getPos() - (cameraSpeed * camera->getAdditionalFront()));
 			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
 			
@@ -176,7 +177,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
         case 'd':
 			rotationEnabled = false;
 			posBefore = camera->getPos();
-            camera->setPos(camera->getPos() + (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
+            camera->setPos(camera->getPos() + (glm::normalize(glm::cross(camera->getAdditionalFront(), camera->getUp())) * cameraSpeed));
 			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
 			
@@ -184,7 +185,7 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
         case 'a':
 			rotationEnabled = false;
 			posBefore = camera->getPos();
-            camera->setPos(camera->getPos() - (glm::normalize(glm::cross(camera->getFront(), camera->getUp())) * cameraSpeed));
+            camera->setPos(camera->getPos() - (glm::normalize(glm::cross(camera->getAdditionalFront(), camera->getUp())) * cameraSpeed));
 			absPos = camera->getAbsolutePosition();
 			posAfter = camera->getPos();
 	
@@ -288,6 +289,124 @@ void kbdCB(unsigned char c, int mouseX, int mouseY) {
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Cursor:
+int mouseX, mouseY;
+int scrollX, scrollY;
+float hX, hY, hZ;
+
+// Hand settings:
+glm::mat4 handMatrix;
+float scalingFactor = 2.0f;
+const int nrOfCapsules = 16;      ///< The hand model is made of N capsules
+glm::mat3 basePose[nrOfCapsules];   ///< Hand initial, neutral pose
+glm::mat4 baseWrist = glm::mat4(1.0);
+Node *hand = nullptr;
+
+class SampleListener : public Leap::Listener
+{
+	//////////
+public: //
+//////////
+
+   /**
+	* Get the final rotation matrix for a given segment.
+	* @param hand Leap Motion hand object
+	* @param fingers Leap Motion finger list object
+	* @param index index of the segment
+	* @param segment segment number
+	* @return rotational (3x3) matrix for the given segment
+	*/
+	glm::mat3 segFinalRotation(const Leap::Hand &hand, const Leap::FingerList &fingers, int index, int segment)
+	{
+		// Node matrix:
+		Leap::Matrix lpFingerMatrix;
+		glm::mat3 fingerMatrix;
+		lpFingerMatrix = fingers[index].bone((Leap::Bone::Type) segment).basis();
+		memcpy(&fingerMatrix, &lpFingerMatrix.toArray3x3(), sizeof(glm::mat3));
+
+		// Get parent matrix:
+		Leap::Matrix lpParentMatrix;
+		glm::mat3 parentMatrix;
+		if (segment > 0)
+			lpParentMatrix = fingers[index].bone((Leap::Bone::Type) (segment - 1)).basis();
+		else
+			lpParentMatrix = hand.basis();
+		memcpy(&parentMatrix, &lpParentMatrix.toArray3x3(), sizeof(glm::mat3));
+		parentMatrix = glm::inverse(parentMatrix);
+
+		// Return matrix:
+		return glm::inverse(parentMatrix * fingerMatrix);
+	}
+
+	/**
+	 * Leap Motion update methods invoked when a hand is over the sensor.
+	 * @param controller Leap Motion controller object
+	 */
+	void SampleListener::onFrame(const Leap::Controller &controller)
+	{
+		// Get the most recent frame and report some basic information:
+		const Leap::Frame frame = controller.frame();
+		Leap::HandList hands = frame.hands();
+
+		// Iterate through available hands (if any):
+		for (Leap::HandList::const_iterator hl = hands.begin(); hl != hands.end(); ++hl)
+		{
+			// Get the right hand only:
+			const Leap::Hand rhand = *hl;
+			if (rhand.isLeft())
+				continue;
+
+			// Hand position:
+			hX = (rhand.palmPosition().x / scalingFactor);
+			hY = (rhand.palmPosition().y / scalingFactor) - 40.0f;
+			hZ = (rhand.palmPosition().z / scalingFactor);
+		
+			Leap::Matrix m = rhand.basis();
+			memcpy(&handMatrix, &m.toArray4x4(), sizeof(glm::mat4));
+			Leap::Vector wvec = rhand.palmPosition();
+			handMatrix[3] = glm::vec4(wvec.x / scalingFactor, wvec.y / scalingFactor - 70.0f, wvec.z / scalingFactor, 1.0f); // Some harcoded offsets
+			// Index:         
+			// OvMatrix4 inv = handMatrix;
+			// inv[3] = OvVector4(0.0f, 0.0f, 0.0f, 1.0f);
+			// inv = glm::transpose(inv);
+			Leap::FingerList fingers = rhand.fingers();
+
+			// TODO: implement wrist
+			/*
+			glm::vec4 wristPos = glm::vec4(rhand.wristPosition().x, rhand.wristPosition().y, rhand.wristPosition().z, 1);
+			baseWrist[3] = wristPos;
+			glm::mat4 wristRot = glm::mat4(1);
+			wristRot[0] = rhand.rotationMatrix().toArray4x4()[0];
+			// Wrist:
+			hand->getSceneElementByName("Cylinder001")->setMatrix(baseWrist*);
+			*/
+			// Thumb:
+			hand->getSceneElementByName("Capsule013")->setMatrix(basePose[13] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_PROXIMAL));
+			hand->getSceneElementByName("Capsule014")->setMatrix(basePose[14] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_DISTAL/*TYPE_INTERMEDIATE*/));
+		//	hand->getSceneElementByName("Capsule015")->setMatrix(basePose[15] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_DISTAL));
+			printf("5");
+			// Pinky:
+			hand->getSceneElementByName("Capsule001")->setMatrix(basePose[1] * segFinalRotation(rhand, fingers, 4, Leap::Bone::TYPE_PROXIMAL));
+			hand->getSceneElementByName("Capsule002")->setMatrix(basePose[2] * segFinalRotation(rhand, fingers, 4, Leap::Bone::TYPE_INTERMEDIATE));
+			hand->getSceneElementByName("Capsule003")->setMatrix(basePose[3] * segFinalRotation(rhand, fingers, 4, Leap::Bone::TYPE_DISTAL));
+
+			// Ring:
+			hand->getSceneElementByName("Capsule004")->setMatrix(basePose[4] * segFinalRotation(rhand, fingers, 3, Leap::Bone::TYPE_PROXIMAL));
+			hand->getSceneElementByName("Capsule005")->setMatrix(basePose[5] * segFinalRotation(rhand, fingers, 3, Leap::Bone::TYPE_INTERMEDIATE));
+			hand->getSceneElementByName("Capsule006")->setMatrix(basePose[6] * segFinalRotation(rhand, fingers, 3, Leap::Bone::TYPE_DISTAL));
+
+			// Middle:
+			hand->getSceneElementByName("Capsule007")->setMatrix(basePose[7] * segFinalRotation(rhand, fingers, 2, Leap::Bone::TYPE_PROXIMAL));
+			hand->getSceneElementByName("Capsule008")->setMatrix(basePose[8] * segFinalRotation(rhand, fingers, 2, Leap::Bone::TYPE_INTERMEDIATE));
+			hand->getSceneElementByName("Capsule009")->setMatrix(basePose[9] * segFinalRotation(rhand, fingers, 2, Leap::Bone::TYPE_DISTAL));
+
+			// Index:
+			hand->getSceneElementByName("Capsule010")->setMatrix(basePose[10] * segFinalRotation(rhand, fingers, 1, Leap::Bone::TYPE_PROXIMAL));
+			hand->getSceneElementByName("Capsule011")->setMatrix(basePose[11] * segFinalRotation(rhand, fingers, 1, Leap::Bone::TYPE_INTERMEDIATE));
+			hand->getSceneElementByName("Capsule012")->setMatrix(basePose[12] * segFinalRotation(rhand, fingers, 1, Leap::Bone::TYPE_DISTAL));
+		}
+	}
+};
 
 int main(int argc, char** argv) {
 	for (int i = 0; i < argc; i++) {
@@ -366,6 +485,25 @@ int main(int argc, char** argv) {
 			cSS << "Capsule" << std::setfill('0') << std::setw(3) << i;
 			capsules.push_back(root->getSceneElementByName(cSS.str().data()));
 	}
+
+	baseWrist = root->getSceneElementByName("Cylinder001")->getMatrix();
+	// Bind initial pose by name:
+	for (int c = 1; c < 15; c++)
+	{
+		char name[256];
+		if (c < 10)
+			sprintf(name, "Capsule00%d", c);
+		else
+			sprintf(name, "Capsule0%d", c);
+
+		basePose[c] = glm::mat3(1.0);
+		for (int d = 0; d < 3; d++)
+		{
+			glm::vec4 v = root->getSceneElementByName(name)->getMatrix()[d];
+			
+			basePose[c][d] = glm::vec3(v.x, v.y, v.z);
+		}
+	}
 	
 	//	Show version
 	std::cout << "Library Version: " << TunaGE::version().data() << std::endl;
@@ -377,6 +515,15 @@ int main(int argc, char** argv) {
 	TunaGE::setLightning(lightning);
 	TunaGE::setWireframe(wireframe);
 	TunaGE::setDebug(debug);
+	hand = root;
+	// Load LeapMotion:
+	Leap::Controller leapCtrl;
+	SampleListener leapList;
+
+	
+	// Have the sample listener receive events from the controller:
+	leapCtrl.addListener(leapList);
+	
 
 	//	Enter main loop
 	TunaGE::loop();
