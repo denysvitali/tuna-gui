@@ -301,6 +301,7 @@ const int nrOfCapsules = 16;      ///< The hand model is made of N capsules
 glm::mat3 basePose[nrOfCapsules];   ///< Hand initial, neutral pose
 glm::mat4 baseWrist = glm::mat4(1.0);
 Node *hand = nullptr;
+Node *sphere = nullptr;
 
 class SampleListener : public Leap::Listener
 {
@@ -380,11 +381,26 @@ public: //
 			// Wrist:
 			hand->getSceneElementByName("Cylinder001")->setMatrix(baseWrist*);
 			*/
+			glm::vec3 knuckeJointPos = glm::vec3(fingers[1].jointPosition(Leap::Finger::Joint::JOINT_DIP).x, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_DIP).y, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_DIP).z);
+			glm::vec3 mediumJointPos = glm::vec3(fingers[1].jointPosition(Leap::Finger::Joint::JOINT_MCP).x, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_MCP).y, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_MCP).z);
+			glm::vec3 tipJointPos = glm::vec3(fingers[1].jointPosition(Leap::Finger::Joint::JOINT_PIP).x, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_PIP).y, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_PIP).z);
+			glm::vec3 cross = glm::cross(mediumJointPos - knuckeJointPos, tipJointPos - knuckeJointPos);
+			printf("%f, %f, %f \n", cross.x, cross.y, cross.z);
+			if (cross.x > -100) {
+				if(sphere == nullptr)
+					sphere = hand->getSceneElementByName("Sphere001")->unlink();
+			}
+			else {
+				if (sphere != nullptr) {
+					hand->getSceneElementByName("Box001")->link(sphere);
+					sphere = nullptr;
+				}
+			}
 			// Thumb:
 			hand->getSceneElementByName("Capsule013")->setMatrix(basePose[13] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_PROXIMAL));
 			hand->getSceneElementByName("Capsule014")->setMatrix(basePose[14] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_DISTAL/*TYPE_INTERMEDIATE*/));
 		//	hand->getSceneElementByName("Capsule015")->setMatrix(basePose[15] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_DISTAL));
-			printf("5");
+	
 			// Pinky:
 			hand->getSceneElementByName("Capsule001")->setMatrix(basePose[1] * segFinalRotation(rhand, fingers, 4, Leap::Bone::TYPE_PROXIMAL));
 			hand->getSceneElementByName("Capsule002")->setMatrix(basePose[2] * segFinalRotation(rhand, fingers, 4, Leap::Bone::TYPE_INTERMEDIATE));
@@ -435,7 +451,7 @@ int main(int argc, char** argv) {
 
     Node* root;
 
-    std::string sceneName = "ScaledTest.OVO";
+    std::string sceneName = "SingleLight.OVO";
     std::string path;
 
 #if _WINDOWS
@@ -456,7 +472,7 @@ int main(int argc, char** argv) {
 	newNode->link(root);
 	
 	root->getSceneElementByName("Group001")->setFlipScene(true);
-	Node* divano = root->getSceneElementByName("Group001")->unlink();
+	//Node* divano = root->getSceneElementByName("Group001")->unlink();
 	root->getSceneElementByName("Plane002")->unlink();
 	root->getSceneElementByName("Plane003")->unlink();
 	root->getSceneElementByName("Plane004")->unlink();
