@@ -6,6 +6,6 @@
 #endif
 
 using namespace tunagui;
-const std::string& Version::GIT_SHA1 = "5ad2bb9-dirty";
-const std::string& Version::GIT_DATE = "Mon Apr 29 18:09:42 2019";
-const std::string& Version::GIT_COMMIT_SUBJECT = "Simplified main";
+const std::string& Version::GIT_SHA1 = "59e6a92-dirty";
+const std::string& Version::GIT_DATE = "Sun May 5 15:57:31 2019";
+const std::string& Version::GIT_COMMIT_SUBJECT = "using new scene, index recognition";

@@ -299,9 +299,31 @@ glm::mat4 handMatrix;
 float scalingFactor = 2.0f;
 const int nrOfCapsules = 16;      ///< The hand model is made of N capsules
 glm::mat3 basePose[nrOfCapsules];   ///< Hand initial, neutral pose
-glm::mat4 baseWrist = glm::mat4(1.0);
 Node *hand = nullptr;
-Node *sphere = nullptr;
+Node *spheres[6];
+Leap::FingerList fingers;
+glm::vec4 leapPos = glm::vec4(-1,-1,-1,-1);
+
+int checkFinger(int fingerIndex, int sphereIndex) {
+
+	glm::vec3 knuckeJointPos = glm::vec3(fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_DIP).x, fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_DIP).y, fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_DIP).z);
+	glm::vec3 mediumJointPos = glm::vec3(fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_MCP).x, fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_MCP).y, fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_MCP).z);
+	glm::vec3 tipJointPos = glm::vec3(fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_PIP).x, fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_PIP).y, fingers[fingerIndex].jointPosition(Leap::Finger::Joint::JOINT_PIP).z);
+	float dot = glm::dot(mediumJointPos - knuckeJointPos, tipJointPos - knuckeJointPos);
+	float angle = glm::acos(dot / (glm::length(mediumJointPos - knuckeJointPos) * glm::length(tipJointPos - knuckeJointPos)));
+
+	if (angle < 0.25) {
+		hand->getSceneElementByName("Box001")->link(spheres[sphereIndex]);
+		return 1;
+	}
+	else {
+		spheres[sphereIndex]->unlink();
+		if (angle > 0.75)
+			return -1;
+		return 0;
+	}
+
+}
 
 class SampleListener : public Leap::Listener
 {
@@ -366,40 +388,44 @@ public: //
 			memcpy(&handMatrix, &m.toArray4x4(), sizeof(glm::mat4));
 			Leap::Vector wvec = rhand.palmPosition();
 			handMatrix[3] = glm::vec4(wvec.x / scalingFactor, wvec.y / scalingFactor - 70.0f, wvec.z / scalingFactor, 1.0f); // Some harcoded offsets
-			// Index:         
-			// OvMatrix4 inv = handMatrix;
-			// inv[3] = OvVector4(0.0f, 0.0f, 0.0f, 1.0f);
-			// inv = glm::transpose(inv);
-			Leap::FingerList fingers = rhand.fingers();
 
-			// TODO: implement wrist
-			/*
-			glm::vec4 wristPos = glm::vec4(rhand.wristPosition().x, rhand.wristPosition().y, rhand.wristPosition().z, 1);
-			baseWrist[3] = wristPos;
-			glm::mat4 wristRot = glm::mat4(1);
-			wristRot[0] = rhand.rotationMatrix().toArray4x4()[0];
-			// Wrist:
-			hand->getSceneElementByName("Cylinder001")->setMatrix(baseWrist*);
-			*/
-			glm::vec3 knuckeJointPos = glm::vec3(fingers[1].jointPosition(Leap::Finger::Joint::JOINT_DIP).x, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_DIP).y, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_DIP).z);
-			glm::vec3 mediumJointPos = glm::vec3(fingers[1].jointPosition(Leap::Finger::Joint::JOINT_MCP).x, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_MCP).y, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_MCP).z);
-			glm::vec3 tipJointPos = glm::vec3(fingers[1].jointPosition(Leap::Finger::Joint::JOINT_PIP).x, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_PIP).y, fingers[1].jointPosition(Leap::Finger::Joint::JOINT_PIP).z);
-			glm::vec3 cross = glm::cross(mediumJointPos - knuckeJointPos, tipJointPos - knuckeJointPos);
-			printf("%f, %f, %f \n", cross.x, cross.y, cross.z);
-			if (cross.x > -100) {
-				if(sphere == nullptr)
-					sphere = hand->getSceneElementByName("Sphere001")->unlink();
+			fingers = rhand.fingers();
+
+			if(leapPos.w == -1)
+				leapPos = glm::vec4(rhand.wristPosition().x, rhand.wristPosition().y, rhand.wristPosition().z, 1);
+
+			glm::vec4 wristPos = (leapPos - glm::vec4(rhand.wristPosition().x, rhand.wristPosition().y, rhand.wristPosition().z, 1)) * 0.5f;
+			wristPos.y *= -1;
+			leapPos = glm::vec4(rhand.wristPosition().x, rhand.wristPosition().y, rhand.wristPosition().z, 1);
+			
+			int fingerSum = 0;
+			fingerSum += checkFinger(1, 4);
+			fingerSum += checkFinger(2, 3);
+			fingerSum += checkFinger(3, 2);
+			fingerSum += checkFinger(4, 1);
+
+			handMatrix = glm::rotate(handMatrix,glm::radians(90.0f),glm::vec3(1,0,0));
+			handMatrix = glm::rotate(handMatrix, glm::radians(180.0f), glm::vec3(0, 0, 1));
+			
+			if (fingerSum == 4) {
+				hand->getSceneElementByName("Box001")->link(spheres[0]);
+				hand->getSceneElementByName("Cylinder001")->setMatrix(handMatrix);
 			}
 			else {
-				if (sphere != nullptr) {
-					hand->getSceneElementByName("Box001")->link(sphere);
-					sphere = nullptr;
+				spheres[0]->unlink();
+				if (fingerSum == -4) {
+					TunaGE::getCurrentCamera()->setPos(TunaGE::getCurrentCamera()->getPos() + glm::vec3(wristPos*0.03f));
 				}
+				else {
+					hand->getSceneElementByName("Cylinder001")->setMatrix(handMatrix);
+				}
+				
 			}
+
 			// Thumb:
 			hand->getSceneElementByName("Capsule013")->setMatrix(basePose[13] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_PROXIMAL));
-			hand->getSceneElementByName("Capsule014")->setMatrix(basePose[14] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_DISTAL/*TYPE_INTERMEDIATE*/));
-		//	hand->getSceneElementByName("Capsule015")->setMatrix(basePose[15] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_DISTAL));
+			hand->getSceneElementByName("Capsule014")->setMatrix(basePose[14] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_INTERMEDIATE));
+			hand->getSceneElementByName("Capsule015")->setMatrix(basePose[15] * segFinalRotation(rhand, fingers, 0, Leap::Bone::TYPE_DISTAL));
 	
 			// Pinky:
 			hand->getSceneElementByName("Capsule001")->setMatrix(basePose[1] * segFinalRotation(rhand, fingers, 4, Leap::Bone::TYPE_PROXIMAL));
@@ -451,7 +477,7 @@ int main(int argc, char** argv) {
 
     Node* root;
 
-    std::string sceneName = "SingleLight.OVO";
+    std::string sceneName = "Thumb.OVO";
     std::string path;
 
 #if _WINDOWS
@@ -483,16 +509,13 @@ int main(int argc, char** argv) {
 
 	printSceneHierarchy(root);
 
-	newNode->link(mainCamera);
+	root->link(mainCamera);
 
 	//	Set the mirror flag on the Cylinder supporting the gauntlet, this will make it and all his subnodes mirror at y=0
 	cylinder = root->getSceneElementByName("Cylinder001");
-	box = root->getSceneElementByName("Box001");
+	cylinder->setFlipScene(false);
 
 	root->getSceneElementByName("Teapot001")->setFlipScene(true);
-	cylinder->setFlipScene(true);
-	cylinder_initialMat = cylinder->getMatrix();
-
 
 	TunaGE::renderList.pass(newNode);
 
@@ -502,9 +525,13 @@ int main(int argc, char** argv) {
 			capsules.push_back(root->getSceneElementByName(cSS.str().data()));
 	}
 
-	baseWrist = root->getSceneElementByName("Cylinder001")->getMatrix();
+	for (int i = 1; i <= 6; i++) {
+		char name[256];
+		sprintf(name, "Sphere00%d", i);
+		spheres[i - 1] = root->getSceneElementByName(name);
+	}
 	// Bind initial pose by name:
-	for (int c = 1; c < 15; c++)
+	for (int c = 1; c <= 15; c++)
 	{
 		char name[256];
 		if (c < 10)
