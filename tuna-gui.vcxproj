@@ -22,28 +22,28 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{FCB3E3A4-E649-4CC0-B4C7-38F8DCD0DD9E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -123,20 +123,20 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64\Leap.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;$(SolutionDir)dependencies\LeapSDK\lib\x64\Leap.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\LeapSDK\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>powershell -ExecutionPolicy Unrestricted $(ProjectDir)generate-version.ps1</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /yr "D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64\Leap.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /yr "$(SolutionDir)dependencies\LeapSDK\lib\x64\Leap.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64\Leap.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(OUTDIR)tuna-ge.lib;$(SolutionDir)dependencies\LeapSDK\lib\x64\Leap.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\LeapSDK\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)dependencies\LeapSDK\include;$(SolutionDir)tuna-ge\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -147,7 +147,7 @@
       <Command>powershell -ExecutionPolicy Unrestricted $(ProjectDir)generate-version.ps1</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /yr "D:\ProgettoGE\tuna\dependencies\LeapSDK\lib\x64\Leap.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /yr "$(SolutionDir)dependencies\LeapSDK\lib\x64\Leap.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
